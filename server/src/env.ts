@@ -18,6 +18,10 @@ const zEnv = z.object({
 	MONGO_DATABASE: z.string().default("test"),
 	JWT_SECRET: z.string().optional().default("secret"),
 	PUBLIC_URL: z.string().optional().default("http://localhost:5173"),
+
+	CLOUDINARY_NAME: z.string().optional(),
+	CLOUDINARY_API_KEY: z.string().optional(),
+	CLOUDINARY_API_SECRET: z.string().optional(),
 })
 
 let env: TypeOf<typeof zEnv>

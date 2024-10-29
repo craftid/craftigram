@@ -1,13 +1,19 @@
 import { createServer } from "node:http"
-import express, { json, urlencoded } from "express"
+import express, { json, urlencoded, type Request } from "express"
+import cookieParser from "cookie-parser"
 import cors from "cors"
 import debug from "debug"
 import helmet from "helmet"
+import type { JwtPayload } from "jsonwebtoken"
 import morgan from "morgan"
 
 import connectDB from "./db"
 import routes from "./routes"
 import { setupSocket } from "./socket"
+
+export interface CustomRequest extends Request {
+	id?: string | JwtPayload
+}
 
 export const server = () => {
 	debug.enable("express")
@@ -22,13 +28,14 @@ export const server = () => {
 	app.use(helmet())
 	app.use(cors())
 
-
 	if (process.env.NODE_ENV === "development") {
 		app.use(cors({ origin: "http://localhost:5173" }))
 	}
 
 	app.use(urlencoded({ extended: true }))
 	app.use(json())
+	app.use(express.json())
+	app.use(cookieParser())
 	app.use(morgan("dev"))
 	log("Middleware loaded successfully")
 
