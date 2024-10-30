@@ -8,9 +8,9 @@ import {
 	login,
 	logout,
 	register,
-} from "../controllers/user.controller"
-import isAuthenticated from "../middlewares/isAuthenticated"
-import upload from "../middlewares/multer"
+} from "../../controllers/user.controller"
+import isAuthenticated from "../../middlewares/isAuthenticated"
+import upload from "../../middlewares/multer"
 
 const router = Router()
 

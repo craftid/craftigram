@@ -1,30 +1,60 @@
-# MERN Starter
+# CraftiGram | A MERN + TypeScript Stack Instagram Clone
 
-This project is a starter template for a MERN (MongoDB, Express, React, Node.js) stack application. It includes a client-side application built with React, TypeScript, and Vite, and a server-side application built with Node.js and Express.
+CraftiGram is a full-stack Instagram clone built using the MERN stack (MongoDB, Express, React, Node.js) with TypeScript. This project demonstrates a modern web application with real-time features, user authentication, and CRUD operations.
 
-## PNPM
+## Features
 
-it also uses pnpm workspace
+- User authentication (register, login, logout)
+- Create, read, update, and delete posts
+- Like and comment on posts
+- Follow and unfollow users
+- Real-time notifications
+- Responsive design with Tailwind CSS
+
+## Technologies Used
+
+- **Frontend**: React, Redux, Tailwind CSS, TypeScript
+- **Backend**: Node.js, Express, MongoDB, Mongoose
+- **Real-time**: Socket.IO
+- **Build Tools**: Vite, Docker
+- **Linting and Formatting**: ESLint, Prettier
 
 ## Prerequisites
 
 - Node.js >= 20
 - npm >= 7
 - pnpm >= 9.12
+- MongoDB >= 6
 
 ## Installation
 
 1. Clone the repository:
 
 ```sh
-git clone <repository-url>
-cd mern-starter
+git clone <repository-url> <directory>
+cd <directory>
 ```
 
 2. Install dependencies:
 
 ```sh
-pnpm install -w
+pnpm install
+```
+
+3. Copy the example environment variables file and set up Cloudinary:
+
+```sh
+cp /server/.env.local.example /server/.env
+```
+
+Edit the `.env` file to include your Cloudinary credentials, MongoDB URL, and JWT secret:
+
+```
+CLOUDINARY_CLOUD_NAME=your_cloud_name
+CLOUDINARY_API_KEY=your_api_key
+CLOUDINARY_API_SECRET=your_api_secret
+MONGODB_URL=your_mongodb_url
+JWT_SECRET=your_jwt_secret
 ```
 
 ## Running the application
@@ -66,3 +96,9 @@ pnpm run docker:dev
 ```sh
 pnpm run docker:prod
 ```
+
+## License
+
+This project is licensed under the ISC License.
+
+Enjoy building with CraftiGram! 🚀

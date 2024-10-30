@@ -4,10 +4,7 @@ import { Router, static as static_ } from "express"
 import debug from "debug"
 
 import env from "../env"
-import apiRoutes from "./api.route"
-import messageRoutes from "./message.route"
-import postRoutes from "./post.route"
-import userRoutes from "./user.route"
+import v1Routes from "./v1"
 
 debug.enable("express-router")
 const log = debug("express-router")
@@ -17,10 +14,7 @@ const router = Router()
 /**
  * Routes
  */
-router.use("/api", apiRoutes)
-router.use("/user", userRoutes)
-router.use("/post", postRoutes)
-router.use("/message", messageRoutes)
+router.use("/api/v1", v1Routes)
 
 /**
  * Serve the React app in production

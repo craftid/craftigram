@@ -2,8 +2,8 @@ import type { Response } from "express"
 import sharp from "sharp"
 
 import { Comment } from "../model/comment.model"
-import { Post } from "../model/post.model.js"
-import { User } from "../model/user.model.js"
+import { Post } from "../model/post.model"
+import { User } from "../model/user.model"
 import type { CustomRequest } from "../server"
 import { getSocket, getUser } from "../socket"
 import cloudinary from "../utils/cloudinary"
@@ -14,7 +14,10 @@ export const addNewPost = async (req: CustomRequest, res: Response) => {
 		const image = req.file
 		const authorId = req.id
 
-		if (!image) return res.status(400).json({ message: "Image required" })
+		if (!image) {
+			res.status(400).json({ message: "Image required" })
+			return
+		}
 
 		// image upload
 		const optimizedImageBuffer = await sharp(image.buffer)
@@ -100,7 +103,7 @@ export const getUserPost = async (req: CustomRequest, res: Response) => {
 }
 export const likePost = async (req: CustomRequest, res: Response) => {
 	try {
-		const likeKrneWalaUserKiId = req.id
+		const UserLikePost = req.id
 		const postId = req.params.id
 		const post = await Post.findById(postId)
 		if (!post) {
@@ -109,20 +112,20 @@ export const likePost = async (req: CustomRequest, res: Response) => {
 		}
 
 		// like logic started
-		await post.updateOne({ $addToSet: { likes: likeKrneWalaUserKiId } })
+		await post.updateOne({ $addToSet: { likes: UserLikePost } })
 		await post.save()
 
 		// implement socket io for real time notification
-		const user = await User.findById(likeKrneWalaUserKiId).select(
+		const user = await User.findById(UserLikePost).select(
 			"username profilePicture"
 		)
 
 		const postOwnerId = post.author.toString()
-		if (postOwnerId !== likeKrneWalaUserKiId) {
+		if (postOwnerId !== UserLikePost) {
 			// emit a notification event
 			const notification = {
 				type: "like",
-				userId: likeKrneWalaUserKiId,
+				userId: UserLikePost,
 				userDetails: user,
 				postId,
 				message: "Your post was liked",
@@ -142,7 +145,7 @@ export const likePost = async (req: CustomRequest, res: Response) => {
 }
 export const dislikePost = async (req: CustomRequest, res: Response) => {
 	try {
-		const likeKrneWalaUserKiId = req.id
+		const UserLikePost = req.id
 		const postId = req.params.id
 		const post = await Post.findById(postId)
 		if (!post) {
@@ -151,19 +154,19 @@ export const dislikePost = async (req: CustomRequest, res: Response) => {
 		}
 
 		// like logic started
-		await post.updateOne({ $pull: { likes: likeKrneWalaUserKiId } })
+		await post.updateOne({ $pull: { likes: UserLikePost } })
 		await post.save()
 
 		// implement socket io for real time notification
-		const user = await User.findById(likeKrneWalaUserKiId).select(
+		const user = await User.findById(UserLikePost).select(
 			"username profilePicture"
 		)
 		const postOwnerId = post.author.toString()
-		if (postOwnerId !== likeKrneWalaUserKiId) {
+		if (postOwnerId !== UserLikePost) {
 			// emit a notification event
 			const notification = {
 				type: "dislike",
-				userId: likeKrneWalaUserKiId,
+				userId: UserLikePost,
 				userDetails: user,
 				postId,
 				message: "Your post was liked",
@@ -183,7 +186,7 @@ export const dislikePost = async (req: CustomRequest, res: Response) => {
 export const addComment = async (req: CustomRequest, res: Response) => {
 	try {
 		const postId = req.params.id
-		const commentKrneWalaUserKiId = req.id
+		const UserCommented = req.id
 
 		const { text } = req.body
 
@@ -201,7 +204,7 @@ export const addComment = async (req: CustomRequest, res: Response) => {
 
 		const comment = await Comment.create({
 			text,
-			author: commentKrneWalaUserKiId,
+			author: UserCommented,
 			post: postId,
 		})
 
@@ -257,8 +260,10 @@ export const deletePost = async (req: CustomRequest, res: Response) => {
 		}
 
 		// check if the logged-in user is the owner of the post
-		if (post.author.toString() !== authorId)
-			return res.status(403).json({ message: "Unauthorized" })
+		if (post.author.toString() !== authorId) {
+			res.status(403).json({ message: "Unauthorized" })
+			return
+		}
 
 		// delete post
 		await Post.findByIdAndDelete(postId)

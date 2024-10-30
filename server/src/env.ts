@@ -22,6 +22,7 @@ const zEnv = z.object({
 	CLOUDINARY_NAME: z.string().optional(),
 	CLOUDINARY_API_KEY: z.string().optional(),
 	CLOUDINARY_API_SECRET: z.string().optional(),
+	CLOUDINARY_URL: z.string().optional(),
 })
 
 let env: TypeOf<typeof zEnv>
@@ -29,6 +30,7 @@ let env: TypeOf<typeof zEnv>
 try {
 	log(`Checking environment variables...`)
 	env = zEnv.parse(process.env)
+	console.log(JSON.stringify(env, null, 2))
 	log(`Environment variables checked successfully`)
 } catch (err) {
 	if (err instanceof z.ZodError) {

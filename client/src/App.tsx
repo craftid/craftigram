@@ -1,51 +1,78 @@
-import { useState } from "react"
+import { useEffect } from "react"
+import { AppDispatch, RootState } from "@/redux/store"
+import { useDispatch, useSelector } from "react-redux"
+import { createBrowserRouter, RouterProvider } from "react-router-dom"
+import { io } from "socket.io-client"
 
-import reactLogo from "./assets/react.svg"
-import viteLogo from "/vite.svg"
+import ChatPage from "@/components/chat-page"
+import EditProfile from "@/components/edit-profile"
+import Home from "@/components/home"
+import Login from "@/components/login"
+import MainLayout from "@/components/main-layout"
+import Profile from "@/components/profile"
+import ProtectedRoutes from "@/components/protected-routes"
+import Signup from "@/components/signup"
 
-import "./App.css"
+import { setOnlineUsers } from "./redux/chat-slice"
+import { setLikeNotification } from "./redux/rtn-slice"
+import { setSocket } from "./redux/socket-slice"
+
+const browserRouter = createBrowserRouter([
+	{
+		path: "/",
+		element: (
+			<ProtectedRoutes>
+				<MainLayout />
+			</ProtectedRoutes>
+		),
+		children: [
+			{
+				path: "/",
+				element: (
+					<ProtectedRoutes>
+						<Home />
+					</ProtectedRoutes>
+				),
+			},
+			{
+				path: "/profile/:id",
+				element: (
+					<ProtectedRoutes>
+						{" "}
+						<Profile />
+					</ProtectedRoutes>
+				),
+			},
+			{
+				path: "/account/edit",
+				element: (
+					<ProtectedRoutes>
+						<EditProfile />
+					</ProtectedRoutes>
+				),
+			},
+			{
+				path: "/chat",
+				element: (
+					<ProtectedRoutes>
+						<ChatPage />
+					</ProtectedRoutes>
+				),
+			},
+		],
+	},
+	{
+		path: "/login",
+		element: <Login />,
+	},
+	{
+		path: "/signup",
+		element: <Signup />,
+	},
+])
 
 function App() {
-	const [count, setCount] = useState(0)
-	const [apiData, setApiData] = useState<{ message: string } | null>(null)
-
-	const getApi = async () => {
-		const res = await fetch("/api")
-		const data = await res.json()
-		console.log(data)
-		setApiData(data)
-	}
-
-	return (
-		<>
-			<div>
-				<a href="https://vitejs.dev" target="_blank">
-					<img src={viteLogo} className="logo" alt="Vite logo" />
-				</a>
-				<a href="https://react.dev" target="_blank">
-					<img src={reactLogo} className="logo react" alt="React logo" />
-				</a>
-			</div>
-			<h1>Vite + React</h1>
-			<div className="card">
-				<button onClick={() => setCount((count) => count + 1)}>
-					count is {count}
-				</button>
-
-				{apiData ? (
-					<p>{apiData.message}</p>
-				) : (
-					<button onClick={getApi}>Fetch API</button>
-				)}
-				<p>
-					Edit <code>src/App.tsx</code> and save to test HMR
-				</p>
-			</div>
-			<p className="read-the-docs">
-				Click on the Vite and React logos to learn more
-			</p>
-		</>
-	)
+	return <RouterProvider router={browserRouter} />
 }
 
 export default App

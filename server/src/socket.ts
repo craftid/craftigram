@@ -33,20 +33,20 @@ export const getUser = (userId: string) => {
 
 export const setupSocket = (server: any) => {
 	log("setting up socket")
+
 	io = new Server(server, {
 		cors: {
 			origin: "*",
+			methods: ["GET", "POST"],
 		},
 	})
 
 	io.on("connection", (socket) => {
 		log("client connected", socket.id)
-		socket.on("addUser", (userData) => {
-			addUser(userData, socket.id)
-			log("client connected", socket.id)
-			io.emit("getUsers", users)
-		})
-
+		const userId = socket.handshake.query.userId
+		if (userId) {
+			addUser({ _id: userId }, socket.id)
+		}
 		socket.on("getOnlineUsers", () => {
 			io.emit("getUsers", users)
 		})

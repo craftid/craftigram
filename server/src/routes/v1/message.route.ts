@@ -1,7 +1,7 @@
 import express from "express"
 
-import { getMessage, sendMessage } from "../controllers/message.controller"
-import isAuthenticated from "../middlewares/isAuthenticated"
+import { getMessage, sendMessage } from "../../controllers/message.controller"
+import isAuthenticated from "../../middlewares/isAuthenticated"
 
 const router = express.Router()
 

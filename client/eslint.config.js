@@ -19,10 +19,13 @@ export default tseslint.config(
 		},
 		rules: {
 			...reactHooks.configs.recommended.rules,
-			"react-refresh/only-export-components": [
-				"warn",
-				{ allowConstantExport: true },
-			],
+			"react-refresh/only-export-components": "off",
+			// disable no explicit any
+			"@typescript-eslint/no-explicit-any": "off",
+			// disable no unused vars
+			"@typescript-eslint/no-unused-vars": "off",
+			// exhaustive deps
+			"react-hooks/exhaustive-deps": "off",
 		},
 	}
 )
