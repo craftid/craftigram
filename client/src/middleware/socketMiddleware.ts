@@ -42,6 +42,12 @@ const socketMiddleware: Middleware<
 			socket.on("notification", (notification) => {
 				store.dispatch(setLikeNotification(notification))
 			})
+
+			socket.on("newMessage", (newMessage) => {
+				const state = store.getState()
+				const messages = state.chat.messages
+				store.dispatch(setMessages([...messages, newMessage]))
+			})
 		} else if (socket) {
 			socket.close()
 			socket = null
