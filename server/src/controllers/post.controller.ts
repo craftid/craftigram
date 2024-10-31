@@ -188,6 +188,8 @@ export const addComment = async (req: CustomRequest, res: Response) => {
 		const postId = req.params.id
 		const UserCommented = req.id
 
+		console.log("postId", postId, "UserCommented", UserCommented)
+
 		const { text } = req.body
 
 		const post = await Post.findById(postId)
@@ -201,6 +203,9 @@ export const addComment = async (req: CustomRequest, res: Response) => {
 			res.status(404).json({ message: "Post not found", success: false })
 			return
 		}
+
+		console.log("post", post)
+		console.log("UserCommented", UserCommented)
 
 		const comment = await Comment.create({
 			text,

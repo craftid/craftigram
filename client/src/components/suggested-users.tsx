@@ -29,7 +29,9 @@ const SuggestedUsers = () => {
 									<Link to={`/profile/${user?._id}`}>{user?.username}</Link>
 								</h1>
 								<span className="text-sm text-gray-600">
-									{user?.bio || "Bio here..."}
+									{user?.bio && user?.bio?.length > 20
+										? user?.bio?.slice(0, 20) + "..."
+										: user?.bio || ""}
 								</span>
 							</div>
 						</div>

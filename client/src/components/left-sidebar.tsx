@@ -63,22 +63,27 @@ const LeftSidebar = () => {
 	}
 
 	const sidebarItems = [
-		{ icon: <Home />, text: "Home" },
-		{ icon: <Search />, text: "Search" },
-		{ icon: <TrendingUp />, text: "Explore" },
-		{ icon: <MessageCircle />, text: "Messages" },
-		{ icon: <Heart />, text: "Notifications" },
-		{ icon: <PlusSquare />, text: "Create" },
+		{ icon: <Home className="h-6 w-6" />, text: "Home" },
+		{ icon: <Search className="h-6 w-6" />, text: "Search" },
+		{ icon: <TrendingUp className="h-6 w-6" />, text: "Explore" },
+		{ icon: <MessageCircle className="h-6 w-6" />, text: "Messages" },
+		{ icon: <Heart className="h-6 w-6" />, text: "Notifications" },
+		{ icon: <PlusSquare className="h-6 w-6" />, text: "Create" },
 		{
 			icon: (
 				<Avatar className="h-6 w-6">
-					<AvatarImage src={user?.profilePicture} alt="@shadcn" />
-					<AvatarFallback>CN</AvatarFallback>
+					<AvatarImage src={user?.profilePicture} alt={`@${user?.username}`} />
+					<AvatarFallback>
+						{user?.username
+							.split(" ")
+							.map((name) => name[0])
+							.join("")}
+					</AvatarFallback>
 				</Avatar>
 			),
 			text: "Profile",
 		},
-		{ icon: <LogOut />, text: "Logout" },
+		{ icon: <LogOut className="h-6 w-6" />, text: "Logout" },
 	]
 	return (
 		<div className="fixed left-0 top-0 z-10 h-screen w-[16%] border-r border-gray-300 px-4">
