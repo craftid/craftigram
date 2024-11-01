@@ -1,12 +1,13 @@
-import { setPosts, type Comment } from "@/redux/post-slice"
-import { AppDispatch, RootState } from "@/redux/store"
-import { Avatar, AvatarFallback, AvatarImage } from "@components/ui/avatar"
 import axios from "axios"
 import { Trash2 } from "lucide-react"
 import { useDispatch, useSelector } from "react-redux"
 import { toast } from "sonner"
 
+import { Avatar, AvatarFallback, AvatarImage } from "@components/ui/avatar"
 import { Button } from "@/components/ui/button"
+
+import { setPosts, type Comment } from "@/redux/post-slice"
+import { AppDispatch, RootState } from "@/redux/store"
 
 const Comment = ({ comment, postId }: { comment: Comment; postId: string }) => {
 	const { posts } = useSelector((store: RootState) => store.post)

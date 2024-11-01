@@ -1,4 +1,4 @@
-/** @type {import('prettier').Config & import('prettier-plugin-tailwindcss').options} */
+/** @type {import('prettier').Config & import('prettier-plugin-tailwindcss').options & import('@ianvs/prettier-plugin-sort-imports).options} */
 const config = {
 	endOfLine: "lf",
 	semi: false,
@@ -7,17 +7,23 @@ const config = {
 	useTabs: true,
 	trailingComma: "es5",
 	importOrder: [
+		"^(axios/(.*)$)|^(axios$)",
 		"^(express/(.*)$)|^(express$)",
 		"^(react/(.*)$)|^(react$)",
+		"^(react-router/(.*)$)|^(react-router$)",
+		"^(react-router-dom/(.*)$)|^(react-router-dom$)",
+		"",
 		"^(next/(.*)$)|^(next$)",
 		"<THIRD_PARTY_MODULES>",
 		"",
 		"^types$",
 		"^@/types/(.*)$",
 		"^@/config/(.*)$",
+		"^@lib/(.*)$",
 		"^@/lib/(.*)$",
 		"^@/hooks/(.*)$",
 		"",
+		"^@components/(.*)$",
 		"^@/components/ui/(.*)$",
 		"^@/components/(.*)$",
 		"",
@@ -25,6 +31,7 @@ const config = {
 		"^@/styles/(.*)$",
 		"^@/app/(.*)$",
 		"",
+		"^@/(.*)$",
 		"^[./]",
 	],
 	importOrderSeparation: false,
@@ -37,7 +44,9 @@ const config = {
 		"@ianvs/prettier-plugin-sort-imports",
 		"prettier-plugin-tailwindcss",
 	],
-	// tailwindConfig: "./tailwind.config.ts",
+	importTransform: {
+		"@/components": "@components",
+	},
 	tailwindFunctions: [
 		"clsx",
 		"tw",
