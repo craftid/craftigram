@@ -8,6 +8,7 @@ import type { JwtPayload } from "jsonwebtoken"
 import morgan from "morgan"
 
 import connectDB from "./db"
+import logParamsAndQueries from "./middlewares/logParamsAndQueries"
 import routes from "./routes"
 import { setupSocket } from "./socket"
 
@@ -37,6 +38,9 @@ export const server = () => {
 	app.use(express.json())
 	app.use(cookieParser())
 	app.use(morgan("dev"))
+
+	app.use(logParamsAndQueries)
+
 	log("Middleware loaded successfully")
 
 	log("Loading routes...")

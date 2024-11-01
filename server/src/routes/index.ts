@@ -4,12 +4,18 @@ import { Router, static as static_ } from "express"
 import debug from "debug"
 
 import env from "../env"
+import logParamsAndQueries from "../middlewares/logParamsAndQueries"
 import v1Routes from "./v1"
 
 debug.enable("express-router")
 const log = debug("express-router")
 
 const router = Router()
+
+/**
+ * Use the middleware to log params and queries
+ */
+router.use(logParamsAndQueries)
 
 /**
  * Routes
@@ -25,7 +31,7 @@ if (env.NODE_ENV === "production") {
 	router.use(static_(viteBuildPath))
 
 	// Serve the React app for all other routes to support client-side routing
-	router.get("*", (req, res, next) => {
+	router.get("*", (_req, res, _next) => {
 		log("Serving React app")
 		const indexPath = path.join(viteBuildPath, "index.html")
 		readFile(indexPath, "utf8", (err, html) => {

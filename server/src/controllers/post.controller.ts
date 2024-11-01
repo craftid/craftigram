@@ -101,6 +101,7 @@ export const getUserPost = async (req: CustomRequest, res: Response) => {
 		console.log(error)
 	}
 }
+
 export const likePost = async (req: CustomRequest, res: Response) => {
 	try {
 		const UserLikePost = req.id
@@ -143,6 +144,7 @@ export const likePost = async (req: CustomRequest, res: Response) => {
 		return
 	} catch (error) {}
 }
+
 export const dislikePost = async (req: CustomRequest, res: Response) => {
 	try {
 		const UserLikePost = req.id
@@ -183,12 +185,11 @@ export const dislikePost = async (req: CustomRequest, res: Response) => {
 		return
 	} catch (error) {}
 }
+
 export const addComment = async (req: CustomRequest, res: Response) => {
 	try {
 		const postId = req.params.id
 		const UserCommented = req.id
-
-		console.log("postId", postId, "UserCommented", UserCommented)
 
 		const { text } = req.body
 
@@ -203,9 +204,6 @@ export const addComment = async (req: CustomRequest, res: Response) => {
 			res.status(404).json({ message: "Post not found", success: false })
 			return
 		}
-
-		console.log("post", post)
-		console.log("UserCommented", UserCommented)
 
 		const comment = await Comment.create({
 			text,
@@ -231,6 +229,50 @@ export const addComment = async (req: CustomRequest, res: Response) => {
 		console.log(error)
 	}
 }
+
+export const deleteComment = async (req: CustomRequest, res: Response) => {
+	try {
+		const commentId = req.params.id
+		const authorId = req.id
+
+		console.log(`Deleting comment with ID: ${commentId} by user: ${authorId}`)
+
+		const comment = await Comment.findById(commentId)
+		if (!comment) {
+			console.log(`Comment with ID: ${commentId} not found`)
+			res.status(404).json({ message: "Comment not found", success: false })
+			return
+		}
+
+		if (comment.author.toString() !== authorId) {
+			console.log(
+				`User: ${authorId} is not authorized to delete comment: ${commentId}`
+			)
+			res.status(403).json({ message: "Unauthorized", success: false })
+			return
+		}
+
+		const post = await Post.findById(comment.post)
+		if (!post) {
+			console.log(`Post associated with comment ID: ${commentId} not found`)
+			res.status(404).json({ message: "Post not found", success: false })
+			return
+		}
+
+		post.comments = post.comments.filter(
+			(commentId) => commentId.toString() !== comment._id.toString()
+		)
+		await post.save()
+
+		await Comment.findByIdAndDelete(commentId)
+		console.log(`Comment with ID: ${commentId} deleted successfully`)
+		res.status(200).json({ message: "Comment deleted", success: true })
+		return
+	} catch (error) {
+		console.log(`Error deleting comment: ${error}`)
+	}
+}
+
 export const getCommentsOfPost = async (req: CustomRequest, res: Response) => {
 	try {
 		const postId = req.params.id
@@ -253,6 +295,7 @@ export const getCommentsOfPost = async (req: CustomRequest, res: Response) => {
 		console.log(error)
 	}
 }
+
 export const deletePost = async (req: CustomRequest, res: Response) => {
 	try {
 		const postId = req.params.id
@@ -296,6 +339,7 @@ export const deletePost = async (req: CustomRequest, res: Response) => {
 		console.log(error)
 	}
 }
+
 export const bookmarkPost = async (req: CustomRequest, res: Response) => {
 	try {
 		const postId = req.params.id

@@ -4,7 +4,14 @@ import { AppDispatch, RootState } from "@/redux/store"
 import Comment from "@components/comment"
 import { Avatar, AvatarFallback, AvatarImage } from "@components/ui/avatar"
 import { Button } from "@components/ui/button"
-import { Dialog, DialogContent, DialogTrigger } from "@components/ui/dialog"
+import {
+	Dialog,
+	DialogContent,
+	DialogDescription,
+	DialogHeader,
+	DialogTitle,
+	DialogTrigger,
+} from "@components/ui/dialog"
 import axios from "axios"
 import { MoreHorizontal } from "lucide-react"
 import { useDispatch, useSelector } from "react-redux"
@@ -74,6 +81,10 @@ const CommentDialog = ({ open, setOpen }: CommentDialogProps) => {
 				onInteractOutside={() => setOpen(false)}
 				className="flex max-w-5xl flex-col p-0"
 			>
+				<DialogHeader className="hidden">
+					<DialogTitle>Comments</DialogTitle>
+					<DialogDescription>Comments on this post</DialogDescription>
+				</DialogHeader>
 				<div className="flex flex-1">
 					<div className="w-1/2">
 						<img
@@ -117,10 +128,20 @@ const CommentDialog = ({ open, setOpen }: CommentDialogProps) => {
 						<hr />
 						<div className="max-h-96 flex-1 overflow-y-auto p-4">
 							{comment.map((comment) => (
-								<Comment key={comment._id} comment={comment} />
+								<Comment
+									key={comment._id}
+									comment={comment}
+									postId={selectedPost?._id as string}
+								/>
 							))}
 						</div>
-						<div className="p-4">
+						<form
+							onSubmitCapture={(e) => {
+								e.preventDefault()
+								sendMessageHandler()
+							}}
+							className="p-4"
+						>
 							<div className="flex items-center gap-2">
 								<input
 									type="text"
@@ -137,7 +158,7 @@ const CommentDialog = ({ open, setOpen }: CommentDialogProps) => {
 									Send
 								</Button>
 							</div>
-						</div>
+						</form>
 					</div>
 				</div>
 			</DialogContent>
