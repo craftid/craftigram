@@ -33,7 +33,7 @@ const CommentDialog = ({ open, setOpen }: CommentDialogProps) => {
 		if (selectedPost) {
 			setComment(selectedPost.comments)
 		}
-	}, [selectedPost])
+	}, [selectedPost, posts])
 
 	const changeEventHandler: ChangeEventHandler<HTMLInputElement> = (e) => {
 		const inputText = e.target.value
